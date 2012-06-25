@@ -10,7 +10,10 @@
           <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
           <property name="javax.persistence.jdbc.user" value=""/>
           <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
-          <property name="eclipselink.logging.level" value="FINEST"/>
+          <property name="eclipselink.logging.level" value="FINE"/>
+          <property name="eclipselink.metadata-source" value="demo.MetadataRepository"/>
+          <property name="demo.MetadataRepository.location" value="foo://barl"/> <!-- what does it do? -->
+          <property name="demo.MetadataRepository.extra-data" value="foo-bar"/> <!-- and how to use it? -->
         </properties>
     </persistence-unit>
 </persistence>

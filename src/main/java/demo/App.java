@@ -23,6 +23,7 @@ public class App
 
         Customer customer = new Customer();
         customer.setName("AMCE");
+        customer.set("custom", "test");
         em.persist(customer);
         em.getTransaction().commit();
     }
