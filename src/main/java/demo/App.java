@@ -19,8 +19,7 @@ public class App
         
         //EntityManager em = Persistence.createEntityManagerFactory("multi-tenant-pu").createEntityManager();
         em.getTransaction().begin();
-        em.setProperty("other.tenant.id.property", "707");
-        em.setProperty(EntityManagerProperties.MULTITENANT_PROPERTY_DEFAULT, "707");
+        em.setProperty(EntityManagerProperties.MULTITENANT_PROPERTY_DEFAULT, "708");
 
         Customer customer = new Customer();
         customer.setName("AMCE");

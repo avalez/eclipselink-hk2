@@ -9,11 +9,12 @@ import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
+import org.eclipse.persistence.config.EntityManagerProperties;
 
 @Entity
 @Table(name = "CUSTOMER")
 @Multitenant
-@TenantDiscriminatorColumn(name = "TENANT", contextProperty = "multi-tenant.id")
+@TenantDiscriminatorColumn(name = "TENANT", contextProperty = EntityManagerProperties.MULTITENANT_PROPERTY_DEFAULT)
 public class Customer {
 
     @Id
