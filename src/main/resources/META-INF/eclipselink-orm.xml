@@ -3,12 +3,8 @@
 	xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	version="2.1">
-    <entity name="Customer" class="demo.Customer" access="FIELD">
+    <entity name="Customer" class="demo.Customer">
         <attributes>
-            <id name="id">
-            	<generated-value strategy="AUTO" />
-            </id>
-			<!--basic name="name"/--> <!--  why it's not need, but other are needed? -->
 			<basic name="custom" access="VIRTUAL" attribute-type="String">
 			  <column name="FLEX_COL1"/>
 			  <access-methods get-method="get" set-method="set"/>
