@@ -37,29 +37,58 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package demo;
+package demo.multitenancy.persistence;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.persistence.internal.jpa.metadata.xml.XMLEntityMappings;
-import org.eclipse.persistence.jpa.metadata.MetadataSourceAdapter;
-import org.eclipse.persistence.logging.SessionLog;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 
-public class MetadataRepository extends MetadataSourceAdapter {
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.glassfish.hk2.api.Factory;
+import org.jvnet.hk2.annotations.Service;
 
-    @Override
-    public XMLEntityMappings getEntityMappings(Map<String, Object> properties,
-            ClassLoader classLoader, SessionLog log) {
-        XMLEntityMappings entityMappings = super.getEntityMappings(properties, classLoader, log);
-        // TODO: extend mapping progrmatically, but entityMappings is NULL
-        return entityMappings;
+import demo.multitenancy.TenantManager;
+import demo.multitenancy.TenantScoped;
+
+/**
+ * @author Andriy Zhanov
+ *
+ */
+@Service
+@Singleton
+public class TenantEntityManagerFactory implements Factory<EntityManager> {
+    @Inject
+    private TenantManager manager;
+
+    /**
+     * This method creates environments based on the current tenant.
+     * Each tenant will have a backing ServiceLocator.  It is not the
+     * job of the factory to keep track of the items it produces, that
+     * will be done by the scoped context
+     */
+    @TenantScoped
+    public EntityManager provide() {
+        String currentTenant = manager.getCurrentTenant();
+        System.out.println("Creating EntityManager for " + currentTenant);
+
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put(PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT, currentTenant);   
+        properties.put(PersistenceUnitProperties.MULTITENANT_SHARED_EMF, Boolean.FALSE.toString());
+        properties.put(PersistenceUnitProperties.SESSION_NAME, currentTenant);
+        EntityManager em = Persistence.createEntityManagerFactory("multi-tenant-pu", properties).createEntityManager();
+        return em;
     }
 
-    @Override
-    public Map<String, Object> getPropertyOverrides(
-            Map<String, Object> properties, ClassLoader classLoader,
-            SessionLog log) {
-        return properties;
-    }
-
+   /*
+    * @see org.glassfish.hk2.api.Factory#dispose(java.lang.Object)
+    */
+   @Override
+   public void dispose(EntityManager instance) {
+       // No disposal in this case
+       
+   }
 }

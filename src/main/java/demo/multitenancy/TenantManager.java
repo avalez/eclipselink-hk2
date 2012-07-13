@@ -37,29 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package demo;
+package demo.multitenancy;
 
-import java.util.Map;
+import javax.inject.Singleton;
 
-import org.eclipse.persistence.internal.jpa.metadata.xml.XMLEntityMappings;
-import org.eclipse.persistence.jpa.metadata.MetadataSourceAdapter;
-import org.eclipse.persistence.logging.SessionLog;
+import org.jvnet.hk2.annotations.Service;
 
-public class MetadataRepository extends MetadataSourceAdapter {
-
-    @Override
-    public XMLEntityMappings getEntityMappings(Map<String, Object> properties,
-            ClassLoader classLoader, SessionLog log) {
-        XMLEntityMappings entityMappings = super.getEntityMappings(properties, classLoader, log);
-        // TODO: extend mapping progrmatically, but entityMappings is NULL
-        return entityMappings;
+/**
+ * This class keeps track of the currently active tenant. The currently active
+ * tenant can be changed with this class
+ * 
+ * @author Andriy Zhdanov
+ * 
+ */
+@Service @Singleton
+public class TenantManager {
+    private ThreadLocal<String> currentTenant = new ThreadLocal<String>();
+    
+    /**
+     * Sets the current tenant to this tenant
+     * 
+     * @param currentTenant
+     */
+    public void setCurrentTenant(String currentTenant) {
+        this.currentTenant.set(currentTenant);
     }
-
-    @Override
-    public Map<String, Object> getPropertyOverrides(
-            Map<String, Object> properties, ClassLoader classLoader,
-            SessionLog log) {
-        return properties;
+    
+    public String getCurrentTenant() {
+        if (currentTenant.get() == null) throw new RuntimeException("Current tenant is not set");
+        return currentTenant.get();
     }
-
+    
 }

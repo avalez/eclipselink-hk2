@@ -37,29 +37,31 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package demo;
+package demo.multitenancy;
 
-import java.util.Map;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import org.eclipse.persistence.internal.jpa.metadata.xml.XMLEntityMappings;
-import org.eclipse.persistence.jpa.metadata.MetadataSourceAdapter;
-import org.eclipse.persistence.logging.SessionLog;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public class MetadataRepository extends MetadataSourceAdapter {
+import javax.inject.Scope;
 
-    @Override
-    public XMLEntityMappings getEntityMappings(Map<String, Object> properties,
-            ClassLoader classLoader, SessionLog log) {
-        XMLEntityMappings entityMappings = super.getEntityMappings(properties, classLoader, log);
-        // TODO: extend mapping progrmatically, but entityMappings is NULL
-        return entityMappings;
-    }
+import org.glassfish.hk2.api.Proxiable;
 
-    @Override
-    public Map<String, Object> getPropertyOverrides(
-            Map<String, Object> properties, ClassLoader classLoader,
-            SessionLog log) {
-        return properties;
-    }
-
+/**
+ * This is the scope annotation for the TenantScoped.  Descriptors
+ * that are in this scope will be based on the current Tenant that is
+ * running.  This scope is Proxiable, which implies that the system will
+ * inject proxies of objects in this scope into injection points
+ * 
+ * @author jwells
+ *
+ */
+@Scope
+@Proxiable
+@Retention(RUNTIME)
+@Target( { TYPE, METHOD })
+public @interface TenantScoped {
 }
