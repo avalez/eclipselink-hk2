@@ -46,7 +46,7 @@
 	version="2.1">
     <entity name="Customer" class="demo.Customer">
         <attributes>
-			<basic name="custom" access="VIRTUAL" attribute-type="String">
+			<basic name="wayne" access="VIRTUAL" attribute-type="String">
 			  <column name="FLEX_COL1"/>
 			  <access-methods get-method="get" set-method="set"/>
 			</basic>

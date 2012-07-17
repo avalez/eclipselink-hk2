@@ -96,7 +96,7 @@ public class AppTest extends TestCase {
         entityManager.getTransaction().begin();
         Customer customer = new Customer();
         customer.setName("ACME");
-        customer.set("custom", "Acme Corporation");
+        customer.set("acme", "Acme Corporation");
         entityManager.persist(customer);
         entityManager.getTransaction().commit();
 
@@ -107,7 +107,7 @@ public class AppTest extends TestCase {
         entityManager.getTransaction().begin();
         customer = new Customer();
         customer.setName("Wayne");
-        customer.set("custom", "Bruce Wayne Enterprise");
+        customer.set("wayne", "Bruce Wayne Enterprise");
         entityManager.persist(customer);
         entityManager.getTransaction().commit();
 

@@ -65,10 +65,12 @@ public class TenantEntityManagerFactory implements Factory<EntityManager> {
     private TenantManager manager;
 
     /**
-     * This method creates environments based on the current tenant.
-     * Each tenant will have a backing ServiceLocator.  It is not the
-     * job of the factory to keep track of the items it produces, that
-     * will be done by the scoped context
+     * This method creates EntityManager based on the current tenant. It uses
+     * 'Persistence Unit per Tenant' - new persistence contexts with their own
+     * caches are created per tenant. It could use 'Persistence Context per
+     * Tenant' - single shared persistence unit, so tenant context is specified
+     * per persistence Context (EntityManager) using the createEntityManager(Map
+     * properties). See http://wiki.eclipse.org/EclipseLink/Examples/JPA/Multitenant
      */
     @TenantScoped
     public EntityManager provide() {

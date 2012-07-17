@@ -37,21 +37,31 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package demo;
+package demo.multitenancy.persistence;
 
 import java.util.Map;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.internal.jpa.metadata.xml.XMLEntityMappings;
-import org.eclipse.persistence.jpa.metadata.MetadataSourceAdapter;
+import org.eclipse.persistence.jpa.metadata.MetadataSource;
+import org.eclipse.persistence.jpa.metadata.XMLMetadataSource;
 import org.eclipse.persistence.logging.SessionLog;
 
-public class MetadataRepository extends MetadataSourceAdapter {
+/**
+ * {@link MetadataSource} per tenant.
+ * 
+ * @author Andriy Zhdanov
+ *
+ */
+public class TenantMetadataSource extends XMLMetadataSource {
 
     @Override
     public XMLEntityMappings getEntityMappings(Map<String, Object> properties,
             ClassLoader classLoader, SessionLog log) {
+        String tenantId = (String) properties.get(PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT);
+        // could use PersistenceUnitProperties.METADATA_SOURCE_XML_URL
+        properties.put(PersistenceUnitProperties.METADATA_SOURCE_XML_FILE, "META-INF/eclipselink-orm-" + tenantId + ".xml");
         XMLEntityMappings entityMappings = super.getEntityMappings(properties, classLoader, log);
-        // TODO: extend mapping progrmatically, but entityMappings is NULL
         return entityMappings;
     }
 

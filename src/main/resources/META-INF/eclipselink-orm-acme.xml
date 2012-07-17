@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,19 +40,16 @@
     holder.
 
 -->
-<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-        version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
-    <persistence-unit name="multi-tenant-pu" transaction-type="RESOURCE_LOCAL">
-        <class>demo.Customer</class>
-        <properties>
-          <property name="javax.persistence.jdbc.url" value="jdbc:h2:target/demo.db"/>
-          <property name="javax.persistence.jdbc.password" value=""/>
-          <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-          <property name="javax.persistence.jdbc.user" value=""/>
-          <property name="eclipselink.ddl-generation" value="create-tables"/> <!--  'drop-or' drops for each tenant!!! -->
-          <property name="eclipselink.logging.level" value="FINE"/>
-          <property name="eclipselink.metadata-source" value="demo.multitenancy.persistence.TenantMetadataSource"/>
-        </properties>
-    </persistence-unit>
-</persistence>
+<entity-mappings
+	xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="2.1">
+    <entity name="Customer" class="demo.Customer">
+        <attributes>
+			<basic name="acme" access="VIRTUAL" attribute-type="String">
+			  <column name="FLEX_COL1"/>
+			  <access-methods get-method="get" set-method="set"/>
+			</basic>
+        </attributes>
+    </entity>
+</entity-mappings>
