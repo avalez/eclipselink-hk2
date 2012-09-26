@@ -44,7 +44,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
@@ -60,7 +60,7 @@ import demo.multitenancy.TenantScoped;
  */
 @Service
 @Singleton
-public class TenantEntityManagerFactory implements Factory<EntityManager> {
+public class EMFFactory implements Factory<EntityManagerFactory> {
     @Inject
     private TenantManager manager;
 
@@ -73,7 +73,7 @@ public class TenantEntityManagerFactory implements Factory<EntityManager> {
      * properties). See http://wiki.eclipse.org/EclipseLink/Examples/JPA/Multitenant
      */
     @TenantScoped
-    public EntityManager provide() {
+    public EntityManagerFactory provide() {
         String currentTenant = manager.getCurrentTenant();
         System.out.println("Creating EntityManager for " + currentTenant);
 
@@ -81,15 +81,14 @@ public class TenantEntityManagerFactory implements Factory<EntityManager> {
         properties.put(PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT, currentTenant);   
         properties.put(PersistenceUnitProperties.MULTITENANT_SHARED_EMF, Boolean.FALSE.toString());
         properties.put(PersistenceUnitProperties.SESSION_NAME, currentTenant);
-        EntityManager em = Persistence.createEntityManagerFactory("multi-tenant-pu", properties).createEntityManager();
-        return em;
+        return Persistence.createEntityManagerFactory("multi-tenant-pu", properties);
     }
 
    /*
     * @see org.glassfish.hk2.api.Factory#dispose(java.lang.Object)
     */
    @Override
-   public void dispose(EntityManager instance) {
+   public void dispose(EntityManagerFactory instance) {
        // No disposal in this case
        
    }

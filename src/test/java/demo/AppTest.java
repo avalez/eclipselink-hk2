@@ -42,6 +42,7 @@ package demo;
 import java.io.IOException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.api.ServiceLocatorFactory;
@@ -83,7 +84,7 @@ public class AppTest extends TestCase {
     // Open question: how EclipseLink supposed to switch entityManager between tenants in multiple threads?
     public void testPersistence()
     {
-        final EntityManager entityManager = locator.getService(EntityManager.class);
+        final EntityManagerFactory emf = locator.getService(EntityManagerFactory.class);
         
         final TenantManager tenantManager = locator.getService(TenantManager.class);
         
@@ -92,7 +93,7 @@ public class AppTest extends TestCase {
         final String tenantWayne = "wayne";
 
         tenantManager.setCurrentTenant(tenantAcme);
-        
+        EntityManager entityManager = emf.createEntityManager();        
         entityManager.getTransaction().begin();
         Customer customer = new Customer();
         customer.setName("ACME");
@@ -103,7 +104,7 @@ public class AppTest extends TestCase {
         Long idAcme = customer.getId();
         
         tenantManager.setCurrentTenant(tenantWayne);
-
+        entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         customer = new Customer();
         customer.setName("Wayne");
