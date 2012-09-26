@@ -54,7 +54,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <hk2.version>2.1.8</hk2.version>
+    <hk2.version>2.1.32</hk2.version>
   </properties>
 
   <build>

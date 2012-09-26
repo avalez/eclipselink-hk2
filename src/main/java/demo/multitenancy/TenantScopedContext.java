@@ -133,4 +133,9 @@ public class TenantScopedContext implements Context<TenantScoped> {
         return false;
     }
 
+    @Override
+    public void destroyOne(ActiveDescriptor<?> descriptor) {
+        // TODO Auto-generated method stub   
+    }
+
 }
