@@ -39,6 +39,10 @@
  */
 package demo;
 
+import java.util.logging.Logger;
+
+import demo.multitenancy.TenantAwareInject;
+
 /**
  * 
  * @author Andriy Zhdanov
@@ -46,6 +50,8 @@ package demo;
  */
 public class App 
 {
+    @TenantAwareInject
+    Logger logger;
 
     public static void main( String[] args )
     {
