@@ -47,6 +47,10 @@ import org.eclipse.persistence.jpa.metadata.MetadataSource;
 import org.eclipse.persistence.jpa.metadata.XMLMetadataSource;
 import org.eclipse.persistence.logging.SessionLog;
 
+//import weblogic.invocation.ComponentInvocationContext;
+//import weblogic.invocation.ComponentInvocationContextManager;
+//import weblogic.server.GlobalServiceLocator;
+
 /**
  * {@link MetadataSource} per tenant.
  * 
@@ -59,6 +63,13 @@ public class TenantMetadataSource extends XMLMetadataSource {
     public XMLEntityMappings getEntityMappings(Map<String, Object> properties,
             ClassLoader classLoader, SessionLog log) {
         String tenantId = (String) properties.get(PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT);
+        /* TODO: https://blogs.oracle.com/WebLogicServer/entry/weblogic_server_and_the_oracle
+        if (tenantId == null) {
+            ComponentInvocationContextManager manager = ComponentInvocationContextManager.getInstance();
+            ComponentInvocationContext context = manager.getCurrentComponentInvocationContext();
+            tenantId = context.getPartitionName();
+        }
+        */
         // could use PersistenceUnitProperties.METADATA_SOURCE_XML_URL
         properties.put(PersistenceUnitProperties.METADATA_SOURCE_XML_FILE, "META-INF/eclipselink-orm-" + tenantId + ".xml");
         XMLEntityMappings entityMappings = super.getEntityMappings(properties, classLoader, log);
